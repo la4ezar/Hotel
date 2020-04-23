@@ -1,16 +1,19 @@
 #pragma once
+#include "Room.h"
 
 class Hotel {
-	int rooms;
-	//int floors;
+	Room* rooms;
+	int rooms_num;
 	int available_rooms;
-
 public:
 	Hotel();
+	~Hotel();
 
-	int getRooms() const;
+	Room* getRooms() const;
+	int getRoomsNum() const;
 	int getAvailableRooms() const;
 
-	void checkin();		// with the room checkin
-	void checkout();	// with the room checkout
+	void checkin(int room_number, Date from, Date to, char* note);		// with the room checkin
+	void checkout(int room_number);	// with the room checkout
+	void availability(Date date) const;
 };
