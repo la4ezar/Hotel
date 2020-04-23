@@ -3,7 +3,7 @@
 #include <cstring>
 #include "Date.h"
 
-Date::Date() : day(1), month(1), year(2000) {}
+Date::Date() : day(0), month(0), year(0) {}
 
 void Date::recalculate(Date& date) {
 	if (date.day < 1 || date.month < 1) {
@@ -72,4 +72,26 @@ void Date::printDate() const {
 void Date::addDays(int days) {
 	this->day += days;
 	recalculate(*this);
+}
+
+Date& Date::operator=(const Date& other) {
+	if (this != &other) {
+		this->day = other.day;
+		this->month = other.month;
+		this->year = other.year;
+	}
+	return *this;
+}
+
+bool Date::operator<(const Date& other) const {
+	if (this == &other) {
+		return false;
+	}
+	if (this->year < other.year)
+		return true;
+	else if (this->month < other.month)
+		return true;
+	else if (this->day < other.day)
+		return true;
+	return false;
 }

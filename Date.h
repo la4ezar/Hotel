@@ -14,7 +14,9 @@ public:
 	Date(int year, int month, int day);
 	Date(const Date& other);
 
+	Date& operator=(const Date& other);
 	bool operator==(const Date& other) const;
+	bool operator<(const Date& other) const;
 
 	void addDays(int days);
 
