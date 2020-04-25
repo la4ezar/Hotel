@@ -13,13 +13,12 @@ Hotel::Hotel() {
 		rooms[i] = Room(room_number++, beds);
 	}
 	rooms_num = x;
-	available_rooms = x;
 }
 
 Hotel::~Hotel() {
 	delete[] rooms;
 }
-
+/*
 Room* Hotel::getRooms() const {
 	Room* new_rooms = new Room[rooms_num];
 	for (int i = 0; i < rooms_num; ++i)
@@ -30,16 +29,12 @@ Room* Hotel::getRooms() const {
 int Hotel::getRoomsNum() const {
 	return rooms_num;
 }
-int Hotel::getAvailableRooms() const {
-	return available_rooms;
-}
 
 void Hotel::checkin(int room_number, Date from, Date to, char* note) {
 	for (int i = 0; i < rooms_num; ++i) {
 		if (room_number == rooms[i].getRoomNumber()) {
 			if (rooms[i].getAvailability() && rooms[i].getAccessibility()) {
 				rooms[i].checkin(from, to, note);
-				--available_rooms;
 				std::cout << "Succesfull checkin.\n";
 				return;
 			}
@@ -56,7 +51,6 @@ void Hotel::checkout(int room_number) {
 		if (room_number == rooms[i].getRoomNumber()) {
 			if (!rooms[i].getAvailability() && rooms[i].getAccessibility()) {
 				rooms[i].checkout();
-				++available_rooms;
 				std::cout << "Succesfull checkout.\n";
 				return;
 			}
@@ -73,4 +67,4 @@ void Hotel::availability(Date date) const {
 	for (int i = 0; i < rooms_num; ++i) 
 		if (rooms[i].isAvailable(date)) 
 			std::cout << "Room " << rooms[i].getRoomNumber() << std::endl;
-}
+}*/

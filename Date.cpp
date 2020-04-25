@@ -95,3 +95,11 @@ bool Date::operator<(const Date& other) const {
 		return true;
 	return false;
 }
+
+bool Date::operator<=(const Date& other) const {
+	return (*this < other && *this == other);
+}
+
+int& Date::operator-(const Date& other) {
+	return((this->day - other.day) + 31 * (this->month - other.month) + 365 * (this->year - other.year));
+}

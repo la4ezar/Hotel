@@ -52,7 +52,25 @@ int main() {
 		else if (!strcmp(command, "unavailable")) {
 			unavailable();
 		}
+		else if (!strcmp(command, "open")) {
+			open();
+			break;
+		}
+		else if (!strcmp(command, "close")) {
+			close();
+			break;
+		}
+		else if (!strcmp(command, "save")) {
+			save();
+			// or save _as();, I should get the next string to see if it is "as"
+			break;
+		}
+		else if (!strcmp(command, "help")) {
+			exit();
+			break;
+		}
 		else if (!strcmp(command, "exit")) {
+			exit();
 			break;
 		}
 		else {
@@ -63,7 +81,7 @@ int main() {
 
 	return 0;
 }
-
+/*
 void TestHotelConstructor(Hotel& hotel) {
 	int n = hotel.getRoomsNum();
 	Room* rooms = hotel.getRooms();
@@ -116,4 +134,4 @@ void TestHotelAvailability(Hotel& hotel) {
 	hotel.availability(date);
 
 	std::cout << "===============================" << std::endl;
-}
+}*/

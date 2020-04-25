@@ -1,41 +1,33 @@
 #pragma once
-#include "Date.h"
-//#include "Person.h" // Bonus
+#include "Reservation.h"
 
 class Room {
-	bool available;
+	Reservation* reservations;
+	int reservations_num;
+	Reservation* unavailable_reservations;	// for unavailable command
+	int unavailable_reservations_num;
 	int beds;
 	unsigned room_number;
-	Date hired_from;
-	Date hired_to;
-	char notes[100];
-	bool accessible;
-	int people_num;
 
-
-	//Person* people;	// Bonus
-	//Activities activities; // Bonus
-
+	Reservation* copyReservations(Reservation* reservations, int old_num, int new_num) const;
 public:
 	Room (unsigned room_number = 0, int beds = 0);
+	~Room();
 	Room& operator=(const Room& other);
 
+	bool isAvailable(Date from, Date to) const;
 	bool isAvailable(Date date) const;
 
-	bool getAvailability() const;
+	Reservation* getReservations() const;
+	int getReservationsNum() const;
+	Reservation* getUnavailableReservations() const;
+	int getUnavailableReservationsNum() const;
 	int getBeds() const;
 	unsigned getRoomNumber() const;
-	bool getAccessibility() const;
-	Date getHiredFrom() const;
-	Date getHiredTo() const;
-	const char* getNote() const;
-	int getPeopleNum() const;
 
 	void checkin(Date from, Date to, char* note);
 	void unavailable(Date from, Date to, char* note);
 	void checkout();
+	void report(Date& from, Date& to) const; //with Date operator- I will cout the days
 
-
-
-	//Activities getActivities() const;	// Bonus
 };
