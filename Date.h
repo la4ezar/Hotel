@@ -7,7 +7,12 @@ class Date {
 	unsigned month;
 	unsigned year;
 
-	void recalculate(Date& date);
+	//void recalculate(Date& date);
+	bool isLeap(int year) const;
+	void setDefault();
+	bool isValidDate(int year, int month, int day) const;
+	int getTotalDays(Date date) const;
+	int leapYears(int year, int month) const;
 
 public:
 	Date();
@@ -20,7 +25,8 @@ public:
 	bool operator<=(const Date& other) const;
 	int& operator-(const Date& other);
 
-	void addDays(int days);
+	//void addDays(int days);
+	
 
 	unsigned getDay() const;
 	unsigned getMonth() const;

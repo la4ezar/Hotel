@@ -1,10 +1,53 @@
 #include <iostream>
 #include <iomanip>
 #include <cstring>
+#include <cmath>
 #include "Date.h"
 
 Date::Date() : day(0), month(0), year(0) {}
 
+void Date::setDefault() {
+	this->day = 0;
+	this->month = 0;
+	this->year = 0;
+}
+
+bool Date::isLeap(int year) const {
+	if (year % 4 == 0) {
+		if (year % 400 == 0)
+			return true;
+		if (year % 100 == 0)
+			return false;
+		return true;
+	}
+	return false;
+}
+
+
+bool Date::isValidDate(int year, int month, int day) const {
+	if (day > 31 || year < 0 || month < 1 || month > 12 || day < 1)
+		return false;
+
+	switch (month) {
+	case 2:
+		if (isLeap(year)) 
+			if (day > 29) 
+				return false;
+		else
+			if (day > 28)
+				return false;
+		break;
+	case 4:
+	case 6:
+	case 9:
+	case 11:
+		if (day > 30)
+			return false;
+		break;
+	}
+	return true;
+}
+/*
 void Date::recalculate(Date& date) {
 	if (date.day < 1 || date.month < 1) {
 		date.day = 1;
@@ -31,12 +74,18 @@ void Date::recalculate(Date& date) {
 		}
 	}
 }
+*/
 
 Date::Date(int year, int month, int day) {
-	this->day = day;
-	this->month = month;
-	this->year = year;
-	recalculate(*this);
+	if(isValidDate(year, month, day)){	
+		this->day = day;
+		this->month = month;
+		this->year = year;
+	}
+	else {
+		std::cerr << "Unvalid date.\n";
+		setDefault();
+	}
 }
 
 Date::Date(const Date& other) {
@@ -69,10 +118,12 @@ void Date::printDate() const {
 			  << std::endl;
 }
 
+/*
 void Date::addDays(int days) {
 	this->day += days;
 	recalculate(*this);
 }
+*/
 
 Date& Date::operator=(const Date& other) {
 	if (this != &other) {
@@ -100,6 +151,47 @@ bool Date::operator<=(const Date& other) const {
 	return (*this < other && *this == other);
 }
 
+int Date::leapYears(int year, int month) const {
+	if (month < 3)
+		--year;
+	return ((year / 4) - (year / 100) + (year / 400));
+}
+
+
+int Date::getTotalDays(Date date) const {
+	int days = date.getDay() + date.getYear() * 365;
+
+	for (int i = 1; i < date.getMonth(); ++i) {
+		switch (i) {
+			case 1:
+			case 3:
+			case 5:
+			case 7:
+			case 8:
+			case 10:
+			case 12:
+				days += 31;
+				break;
+			case 4:
+			case 6:
+			case 9:
+			case 11:
+				days += 30;
+				break;
+			case 2:
+				days += 28;
+				break;
+		}
+	}
+
+	days += leapYears(date.getYear(), date.getMonth());
+	return days;
+}
+
+
 int& Date::operator-(const Date& other) {
-	return((this->day - other.day) + 31 * (this->month - other.month) + 365 * (this->year - other.year));
+	int days1 = getTotalDays(*this);
+	int days2 = getTotalDays(other);
+	int difference = abs(days1 - days2);
+	return difference;
 }
