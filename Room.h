@@ -27,7 +27,7 @@ public:
 
 	void checkin(Date from, Date to, char* note);
 	void unavailable(Date from, Date to, char* note);
-	void checkout();
-	void report(Date& from, Date& to) const; //with Date operator- I will cout the days
+	bool checkout();
+	int daysUsed(Date& from, Date& to) const; //with Date operator- I will cout the days
 
 };

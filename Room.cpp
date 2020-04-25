@@ -60,12 +60,21 @@ unsigned Room::getRoomNumber() const {
 bool Room::isAvailable(Date from, Date to) const {
 	if (reservations_num == 0)
 		return true;
+
 	for (int i = 0; i < reservations_num; ++i) {
 		if (!((reservations[i].getEndDate() <= from) ||
 			(to <= reservations[i].getStartDate()))) {
 			return false;
 		}
 	}
+
+	for (int i = 0; i < unavailable_reservations_num; ++i) {
+		if (!((unavailable_reservations[i].getEndDate() <= from) ||
+			(to <= unavailable_reservations[i].getStartDate()))) {
+			return false;
+		}
+	}
+
 	return true;
 }
 
@@ -75,7 +84,6 @@ bool Room::isAvailable(Date date) const {
 }
 
 void Room::checkin(Date from, Date to, char* note) {
-	// validation on the Hotel cpp
 	Reservation* new_reservations = copyReservations(reservations, reservations_num, reservations_num + 1);
 	new_reservations[reservations_num] = Reservation(Period(from, to), note);
 	if (reservations_num == 1)
@@ -88,14 +96,14 @@ void Room::checkin(Date from, Date to, char* note) {
 	new_reservations = nullptr;
 }
 
-void Room::checkout() {
+bool Room::checkout() {
 	for (int i = 0; i < reservations_num; ++i) {
 		if (reservations[i].getIsCheckout() == false) {
 			reservations[i].checkout();
-			return;
+			return true;
 		}
 	}
-	// maybe cerr for unsuccesfull checkout here
+	return false;
 }
 
 
@@ -112,7 +120,7 @@ void Room::unavailable(Date from, Date to, char* note) {
 	new_unavailable_reservations = nullptr;
 }
 
-void Room::report(Date& from, Date& to) const {
+int Room::daysUsed(Date& from, Date& to) const {
 	// I'll check in the Hotel function if this period is available or not, if its available Ill return that the room is used 0 days
 	// 
 	int days_used = 0;
@@ -136,6 +144,5 @@ void Room::report(Date& from, Date& to) const {
 			}
 		}
 	}
-
-	std::cout << days_used;
+	return days_used;
 }

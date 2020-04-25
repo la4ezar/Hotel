@@ -18,7 +18,7 @@ Hotel::Hotel() {
 Hotel::~Hotel() {
 	delete[] rooms;
 }
-/*
+
 Room* Hotel::getRooms() const {
 	Room* new_rooms = new Room[rooms_num];
 	for (int i = 0; i < rooms_num; ++i)
@@ -33,13 +33,13 @@ int Hotel::getRoomsNum() const {
 void Hotel::checkin(int room_number, Date from, Date to, char* note) {
 	for (int i = 0; i < rooms_num; ++i) {
 		if (room_number == rooms[i].getRoomNumber()) {
-			if (rooms[i].getAvailability() && rooms[i].getAccessibility()) {
+			if (rooms[i].isAvailable(from,to)) {
 				rooms[i].checkin(from, to, note);
 				std::cout << "Succesfull checkin.\n";
 				return;
 			}
 			else {
-				std::cout << "The room is not available. Sorry!\n";
+				std::cout << "The room is not available in this period. Sorry!\n";
 				return;
 			}
 		}
@@ -49,22 +49,70 @@ void Hotel::checkin(int room_number, Date from, Date to, char* note) {
 void Hotel::checkout(int room_number) {
 	for (int i = 0; i < rooms_num; ++i) {
 		if (room_number == rooms[i].getRoomNumber()) {
-			if (!rooms[i].getAvailability() && rooms[i].getAccessibility()) {
-				rooms[i].checkout();
+			bool successful_checkout = rooms[i].checkout();
+
+			if(successful_checkout)
 				std::cout << "Succesfull checkout.\n";
-				return;
-			}
-			else {
-				std::cout << "The room can't be checkout. Sorry!\n";
-				return;
-			}
+			else
+				std::cout << "Unsuccesfull checkout.\n";
+
+			return;
 		}
 	}
 }
 
 void Hotel::availability(Date date) const {
 	std::cout << "Rooms available:\n";
-	for (int i = 0; i < rooms_num; ++i) 
-		if (rooms[i].isAvailable(date)) 
+	bool atLeastOne = false;
+	for (int i = 0; i < rooms_num; ++i) {
+		if (rooms[i].isAvailable(date)) {
 			std::cout << "Room " << rooms[i].getRoomNumber() << std::endl;
-}*/
+			atLeastOne = true;
+		}
+	}
+	if (!atLeastOne)
+		std::cout << "There are no available rooms on this date. Sorry!\n";
+	std::cout << std::endl;
+}
+
+void Hotel::report(Date from, Date to) const {
+	for (int i = 0; i < rooms_num; ++i) {
+		if (rooms[i].isAvailable(from, to))
+			continue;
+		else
+			std::cout << "Room " << i << " is used " << rooms[i].daysUsed(from,to) << " times in this period.\n";
+	}
+}
+
+void Hotel::unavailable(int room_number, Date from, Date to, char* note) {
+	for (int i = 0; i < rooms_num; ++i) {
+		if (rooms[i].getRoomNumber() == room_number) {
+			if (rooms[i].isAvailable(from, to)) {
+				rooms[i].unavailable(from, to, note);
+				return;
+			}
+			else {
+				std::cerr << "The room is unavailable in this period.\n";
+			}
+		}
+	}
+}
+
+
+void Hotel::find(int beds, Date from, Date to) const {
+	int min = 0;
+	int i = 0;
+	for (; i < rooms_num; ++i) {
+		if(rooms[i].isAvailable(from,to)){
+			if (beds <= rooms[i].getBeds()) {
+				if (min == 0)
+					min = rooms[i].getBeds();
+				if (rooms[i].getBeds() < min)
+					min = rooms[i].getBeds();
+				if (min == beds)
+					break;
+			}
+		}
+	}
+	std::cout << "Room " << i << " with " << min << " bed.\n";
+}
