@@ -31,8 +31,11 @@ int Hotel::getRoomsNum() const {
 }
 
 void Hotel::checkin(int room_number, Date from, Date to, char* note, int beds) {
+	
 	for (int i = 0; i < rooms_num; ++i) {
 		if (room_number == rooms[i].getRoomNumber()) {
+			if (beds == 0)
+				beds = rooms[i].getBeds();
 			if (rooms[i].isAvailable(from,to) && rooms[i].getBeds() >= beds) {
 				rooms[i].checkin(from, to, note, beds);
 				std::cout << "Succesfull checkin.\n";

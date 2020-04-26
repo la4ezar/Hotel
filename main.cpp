@@ -3,20 +3,24 @@
 #include <ctime>
 #include <cstdlib>
 
-void checkin();
-void availability();
-void checkout();
-void report();
-void find();
-void find_algo();
-void unavailable();
-void open();
-void exit();
-void save();
-void save_as();
-void help();
-void close();
+void checkin(Hotel& hotel);
 
+void availability(){}
+void checkout(){}
+void report(){}
+void find(){}
+void find_algo(){}
+void unavailable() {}
+void open() {}
+void exit() {}
+void save() {}
+void save_as() {}
+void help() {}
+void close() {}
+
+
+bool isWhiteSpace(char c);
+char* readStr();
 
 void TestHotelConstructor(Hotel& hotel);
 void TestHotelCheckin(Hotel& hotel);
@@ -42,7 +46,7 @@ int main() {
 	do {
 		std::cin >> command;
 		if (!strcmp(command, "checkin")) {
-			checkin();
+			checkin(hotel);
 		}
 		else if (!strcmp(command, "availability")) {
 			availability();
@@ -87,7 +91,7 @@ int main() {
 			std::cout << "Invalid Command!\n";
 		}
 	} while (true);
-	*/
+	
 
 	return 0;
 }
@@ -207,4 +211,98 @@ void TestHotelFind(Hotel& hotel) {
 	hotel.find(5, from, to);
 	hotel.find(6, from, to);
 
+}
+
+bool isWhiteSpace(char c) {
+	return (c == ' ') ||
+		(c == '\n') ||
+		(c == '\t') ||
+		(c == '\r');
+}
+
+char* readStr() {
+	int n = 8;
+	char* str = new char[n];
+	int cnt = 0;
+	char c = std::cin.get();
+	if (c == '\n') {
+		strcpy(str, "Unknown");
+		std::cin.putback(c);
+		return str;
+	}
+	while (isWhiteSpace(c)) {
+		c = std::cin.get();
+	}
+
+	while (!isWhiteSpace(c)) {
+		if (cnt == n - 1) {
+			str[cnt] = '\0';
+			char* new_str = new char[n * 2];
+			strcpy(new_str, str);
+			delete[] str;
+			str = new_str;
+			new_str = nullptr;
+			n *= 2;
+		}
+		str[cnt++] = c;
+		std::cin.get(c);
+	}
+	std::cin.putback(c);
+	str[cnt] = '\0';
+	char* new_str = new char[cnt + 1];
+	strcpy(new_str, str);
+	delete[] str;
+	str = new_str;
+	new_str = nullptr;
+	return str;
+}
+
+char* readManyStr() {
+	char* str = nullptr;
+	char* tmp;
+	for (int i = 0; true; ++i) {
+		tmp = readStr();
+		if (!strcmp(tmp, "Unknown") || std::atoi(tmp)) {
+			if (std::atoi(tmp))
+				while (*tmp)
+					std::cin.putback(*tmp++);
+			if (i == 0)
+				return nullptr;
+			break;
+		}
+		if (i == 0) {
+			str = new char[strlen(tmp) + 1];
+			strcpy(str, tmp);
+		}
+		else {
+			strcat(str, " ");
+			strcat(str, tmp);
+		}
+	}
+	return str;
+}
+
+Date strToDate(char* str) {
+	int year = atoi(str);
+	str += 5;
+	int month = atoi(str);
+	str += 3;
+	int day = atoi(str);
+	Date date(year, month, day);
+	return date;
+}
+
+void checkin(Hotel& hotel) {
+	char* str1 = readStr();
+	char* str2 = readStr();
+	char* str3 = readStr();
+	char* note = readManyStr();
+	char* str4 = readStr();
+
+	int room_number = atoi(str1);
+	Date from = strToDate(str2);
+	Date to = strToDate(str3);
+	int guests = atoi(str4);
+
+	hotel.checkin(room_number, from, to, note, guests);
 }
