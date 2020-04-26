@@ -68,7 +68,7 @@ void Hotel::availability(Date date) const {
 	std::cout << "Rooms available:\n";
 	bool atLeastOne = false;
 	for (int i = 0; i < rooms_num; ++i) {
-		if (rooms[i].isAvailable(date)) {
+		if (rooms[i].availability(date)) {
 			std::cout << "Room " << rooms[i].getRoomNumber() << std::endl;
 			atLeastOne = true;
 		}

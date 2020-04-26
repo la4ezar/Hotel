@@ -15,6 +15,7 @@ public:
 	~Room();
 	Room& operator=(const Room& other);
 
+	bool availability(Date date) const;
 	bool isAvailable(Date from, Date to) const;
 	bool isAvailable(Date date) const;
 

@@ -4,13 +4,12 @@
 #include <cstdlib>
 
 void checkin(Hotel& hotel);
-
-void availability(){}
-void checkout(){}
-void report(){}
-void find(){}
-void find_algo(){}
-void unavailable() {}
+void availability(Hotel& hotel);
+void checkout(Hotel& hotel);
+void report(Hotel& hotel);
+void find(Hotel& hotel);
+void find_algo(Hotel& hotel);
+void unavailable(Hotel& hotel);
 void open() {}
 void exit() {}
 void save() {}
@@ -49,22 +48,22 @@ int main() {
 			checkin(hotel);
 		}
 		else if (!strcmp(command, "availability")) {
-			availability();
+			availability(hotel);
 		}
 		else if (!strcmp(command, "checkout")) {
-			checkout();
+			checkout(hotel);
 		}
 		else if (!strcmp(command, "report")) {
-			report();
+			report(hotel);
 		}
 		else if (!strcmp(command, "find")) {
-			find();
+			find(hotel);
 		}
 		else if (!strcmp(command, "find!")) {
-			find_algo();
+			find_algo(hotel);
 		}
 		else if (!strcmp(command, "unavailable")) {
-			unavailable();
+			unavailable(hotel);
 		}
 		else if (!strcmp(command, "open")) {
 			open();
@@ -306,3 +305,31 @@ void checkin(Hotel& hotel) {
 
 	hotel.checkin(room_number, from, to, note, guests);
 }
+
+void checkout(Hotel& hotel) {
+	char* str1 = readStr();
+	int room_number = atoi(str1);
+
+	hotel.checkout(room_number);
+}
+
+void availability(Hotel& hotel) {
+	char* str1 = readStr();
+
+	
+	if (!strcmp(str1, "Unknown")) {
+		time_t now = time(0);
+		tm* today = localtime(&now);
+		int year = today->tm_year + 1900;	// It returns the number of years after 1900
+		int month = today->tm_mon + 1;	// It retuns months from 0 to 11
+		int day = today->tm_mday;
+		hotel.availability(Date(year, month, day));
+	}
+	else 
+		hotel.availability(strToDate(str1));
+}
+
+void report(Hotel& hotel){}
+void find(Hotel& hotel){}
+void find_algo(Hotel& hotel){}
+void unavailable(Hotel& hotel){}

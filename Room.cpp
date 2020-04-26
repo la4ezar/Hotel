@@ -69,6 +69,17 @@ int Room::getFreeBeds() const {
 }
 
 
+bool Room::availability(Date date) const {
+	Date from = date;
+	Date to = date.nextDay();
+	if (!((registrations[registrations_num - 1].getEndDate() <= from) || (to <= registrations[registrations_num - 1].getStartDate())))
+		return false;
+
+	if (!((unavailable_registration.getEndDate() <= from) || (to <= unavailable_registration.getStartDate())))
+		return false;
+	return true;
+}
+
 bool Room::isAvailable(Date from, Date to) const {
 	if(registrations_num != 0)
 		if (registrations[registrations_num - 1].getIsCheckout() == false)
@@ -99,10 +110,8 @@ bool Room::isAvailable(Date date) const {
 void Room::checkin(Date from, Date to, char* note, int guests) {
 	Registration* new_registrations = copyRegistrations(registrations, registrations_num, registrations_num + 1);
 	new_registrations[registrations_num] = Registration(Period(from, to), note);
-	if (registrations_num == 1)
-		delete registrations;
-	else
-		delete[] registrations;
+	
+	delete[] registrations;
 
 	registrations = new_registrations;
 	++registrations_num;

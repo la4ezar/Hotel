@@ -127,11 +127,20 @@ bool Date::operator<(const Date& other) const {
 	}
 	if (this->year < other.year)
 		return true;
-	else if (this->month < other.month)
-		return true;
-	else if (this->day < other.day)
-		return true;
-	return false;
+	else if (this->year == other.year) {
+		if (this->month < other.month)
+			return true;
+		else if(this->month == other.month){
+			if (this->day < other.day)
+				return true;
+			else
+				return false;
+		}
+		else
+			return false;
+	}
+	else
+		return false;
 }
 
 bool Date::operator<=(const Date& other) const {
