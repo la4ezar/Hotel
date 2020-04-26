@@ -33,13 +33,13 @@ int Hotel::getRoomsNum() const {
 void Hotel::checkin(int room_number, Date from, Date to, char* note, int beds) {
 	for (int i = 0; i < rooms_num; ++i) {
 		if (room_number == rooms[i].getRoomNumber()) {
-			if (rooms[i].isAvailable(from,to)) {
+			if (rooms[i].isAvailable(from,to) && rooms[i].getBeds() >= beds) {
 				rooms[i].checkin(from, to, note, beds);
 				std::cout << "Succesfull checkin.\n";
 				return;
 			}
 			else {
-				std::cout << "The room is not available in this period. Sorry!\n";
+				std::cout << "Unsuccessful checkin. Sorry!\n";
 				return;
 			}
 		}
@@ -52,9 +52,9 @@ void Hotel::checkout(int room_number) {
 			bool successful_checkout = rooms[i].checkout();
 
 			if(successful_checkout)
-				std::cout << "Succesfull checkout.\n";
+				std::cout << "Successful checkout.\n";
 			else
-				std::cout << "Unsuccesfull checkout.\n";
+				std::cout << "Unsuccessful checkout.\n";
 
 			return;
 		}
@@ -83,7 +83,7 @@ void Hotel::report(Date from, Date to) const {
 		if (days_used == 0)
 			continue;
 	
-		std::cout << "Room " << i << " is used " << rooms[i].daysUsed(from,to) << " times in this period.\n";
+		std::cout << "Room " << i+1 << " is used " << days_used << " times in this period.\n";
 	}
 }
 
@@ -92,10 +92,11 @@ void Hotel::unavailable(int room_number, Date from, Date to, char* note) {
 		if (rooms[i].getRoomNumber() == room_number) {
 			if (rooms[i].isAvailable(from, to)) {
 				rooms[i].unavailable(from, to, note);
+				std::cout << "Successful command. The room is now unavailable in this period.\n";
 				return;
 			}
 			else {
-				std::cerr << "The room is unavailable in this period.\n";
+				std::cerr << "Unsuccessful command.The room is already unavailable in this period.\n";
 			}
 		}
 	}
@@ -117,5 +118,8 @@ void Hotel::find(int beds, Date from, Date to) const {
 			}
 		}
 	}
-	std::cout << "Room " << i << " with " << min << " bed.\n";
+	if (min != 0)
+		std::cout << "Room " << i + 1 << " with " << min << " bed.\n";
+	else
+		std::cerr << "Can not find room with at least " << beds << " beds. Sorry!\n";
 }

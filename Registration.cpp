@@ -18,8 +18,13 @@ Registration& Registration::operator=(const Registration& other) {
 		this->period = other.period;
 		this->isCheckout = other.isCheckout;
 		delete[] this->note;
-		this->note = new char[strlen(other.note) + 1];
-		strcpy(this->note, other.note);
+		if (other.note != nullptr) {
+			this->note = new char[strlen(other.note) + 1];
+			strcpy(this->note, other.note);
+		}
+		else
+			this->note = nullptr;
+		
 	}
 	return *this;
 }

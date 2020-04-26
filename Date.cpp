@@ -135,7 +135,7 @@ bool Date::operator<(const Date& other) const {
 }
 
 bool Date::operator<=(const Date& other) const {
-	return (*this < other && *this == other);
+	return (*this < other || *this == other);
 }
 
 int Date::leapYears(int year, int month) const {

@@ -8,7 +8,7 @@ Room::Room(unsigned room_number, int beds): beds(beds), room_number(room_number)
 }
 
 
-Registration* Room::copyRegistrations(Registration* Rgistrations, int old_num, int new_num) const {
+Registration* Room::copyRegistrations(Registration* registrations, int old_num, int new_num) const {
 	Registration* new_registrations = new Registration[new_num];
 	for (int i = 0; i < old_num; ++i) 
 		new_registrations[i] = registrations[i];
@@ -64,10 +64,15 @@ int Room::getGuests() const {
 	return guests;
 }
 
+int Room::getFreeBeds() const {
+	return this->beds - this->guests;
+}
+
 
 bool Room::isAvailable(Date from, Date to) const {
-	if (registrations[registrations_num - 1].getIsCheckout() == false)
-		return false;
+	if(registrations_num != 0)
+		if (registrations[registrations_num - 1].getIsCheckout() == false)
+			return false;
 
 	// If the dates intersect
 	if (!((unavailable_registration.getEndDate() <= from) || (to <= unavailable_registration.getStartDate())))
@@ -156,6 +161,10 @@ int Room::daysUsed(Date& from, Date& to) const {
 			}
 			else if (to <= registration_end_date) {
 				days_used += to - registration_start_date;
+				continue;
+			}
+			else {
+				days_used += registration_end_date - registration_start_date;
 			}
 		}
 	}

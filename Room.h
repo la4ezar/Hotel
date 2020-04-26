@@ -24,6 +24,7 @@ public:
 	int getBeds() const;
 	int getGuests() const;
 	unsigned getRoomNumber() const;
+	int getFreeBeds() const;
 
 	void checkin(Date from, Date to, char* note, int guests);
 	void unavailable(Date from, Date to, char* note);
