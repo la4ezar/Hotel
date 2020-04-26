@@ -179,3 +179,21 @@ int Room::daysUsed(Date& from, Date& to) const {
 	}
 	return days_used;
 }
+
+
+void Room::addOtherPeople(Date from, Date to, int guests) {
+	this->guests += guests;
+	if (registrations[registrations_num - 1].getStartDate() < from) {
+		from = registrations[registrations_num - 1].getStartDate();
+		if (to < registrations[registrations_num - 1].getEndDate()) 
+			to = registrations[registrations_num - 1].getEndDate();
+		
+		registrations[registrations_num - 1] = Registration(Period(from, to), registrations[registrations_num - 1].getNote());
+	}
+	else {
+		if(to < registrations[registrations_num - 1].getEndDate())
+			to = registrations[registrations_num - 1].getEndDate();
+
+		registrations[registrations_num - 1] = Registration(Period(from, to), registrations[registrations_num - 1].getNote());
+	}
+}

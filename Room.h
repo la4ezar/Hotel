@@ -20,16 +20,17 @@ public:
 	bool isAvailable(Date date) const;
 
 	Registration* getRegistrations() const;
-	//int getRegistrationsNum() const;
 	Registration getUnavailableRegistration() const;
 	int getBeds() const;
 	int getGuests() const;
 	unsigned getRoomNumber() const;
 	int getFreeBeds() const;
 
+	void addOtherPeople(Date from, Date to, int guests);
+
 	void checkin(Date from, Date to, char* note, int guests);
 	void unavailable(Date from, Date to, char* note);
 	bool checkout();
-	int daysUsed(Date& from, Date& to) const; //with Date operator- I will cout the days
+	int daysUsed(Date& from, Date& to) const;
 
 };

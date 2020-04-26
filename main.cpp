@@ -329,7 +329,45 @@ void availability(Hotel& hotel) {
 		hotel.availability(strToDate(str1));
 }
 
-void report(Hotel& hotel){}
-void find(Hotel& hotel){}
-void find_algo(Hotel& hotel){}
-void unavailable(Hotel& hotel){}
+void report(Hotel& hotel) {
+	char* str1 = readStr();
+	char* str2 = readStr();
+
+	Date from = strToDate(str1);
+	Date to = strToDate(str2);
+	hotel.report(from, to);
+}
+void find(Hotel& hotel) {
+	char* str1 = readStr();
+	char* str2 = readStr();
+	char* str3 = readStr();
+
+	int beds = atoi(str1);
+	Date from = strToDate(str2);
+	Date to = strToDate(str3);
+
+	hotel.find(beds, from, to);
+}
+void find_algo(Hotel& hotel){
+	char* str1 = readStr();
+	char* str2 = readStr();
+	char* str3 = readStr();
+
+	int beds = atoi(str1);
+	Date from = strToDate(str2);
+	Date to = strToDate(str3);
+
+	hotel.find_algo(beds, from, to);
+}
+void unavailable(Hotel& hotel) {
+	char* str1 = readStr();
+	char* str2 = readStr();
+	char* str3 = readStr();
+	char* note = readManyStr();
+
+	int room_number = atoi(str1);
+	Date from = strToDate(str2);
+	Date to = strToDate(str3);
+
+	hotel.unavailable(room_number, from, to, note);
+}
