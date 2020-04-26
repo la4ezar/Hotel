@@ -10,12 +10,12 @@ void report(Hotel& hotel);
 void find(Hotel& hotel);
 void find_algo(Hotel& hotel);
 void unavailable(Hotel& hotel);
-void open() {}
-void exit() {}
-void save() {}
-void save_as() {}
-void help() {}
-void close() {}
+void open(){}
+void exit(){}
+void save(){}
+void save_as(){}
+void help(){}
+void close(){}
 
 
 bool isWhiteSpace(char c);
@@ -75,7 +75,7 @@ int main() {
 		}
 		else if (!strcmp(command, "save")) {
 			save();
-			// or save _as();, I should get the next string to see if it is "as"
+			// or save _as(), I will get the next char* to see if it is "as"
 			break;
 		}
 		else if (!strcmp(command, "help")) {

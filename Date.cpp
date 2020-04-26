@@ -105,13 +105,6 @@ void Date::printDate() const {
 			  << std::endl;
 }
 
-/*
-void Date::addDays(int days) {
-	this->day += days;
-	recalculate(*this);
-}
-*/
-
 Date& Date::operator=(const Date& other) {
 	if (this != &other) {
 		this->day = other.day;

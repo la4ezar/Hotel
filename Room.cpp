@@ -37,21 +37,11 @@ Room& Room::operator=(const Room& other) {
 Registration* Room::getRegistrations() const {
 	return copyRegistrations(this->registrations, this->registrations_num, this->registrations_num);
 }
-/*
-int Room::getReservationsNum() const {
-	return this->reservations_num;
-}
-*/
 
 Registration Room::getUnavailableRegistration() const {
 	return this->unavailable_registration;
 }
 
-/*
-int Room::getUnavailableReservationsNum() const {
-	return this->unavailable_reservations_num;
-}
-*/
 
 int Room::getBeds() const {
 	return beds;
@@ -91,16 +81,6 @@ bool Room::isAvailable(Date from, Date to) const {
 
 	return true;
 	
-	/*
-	if(registrations[registrations_num - 1].getIsCheckout() == true)
-		if (!((registrations[registrations_num - 1].getEndDate() <= from) || (to <= registrations[registrations_num - 1].getStartDate())))
-			return false;
-
-	if (!((unavailable_registration.getEndDate() <= from) || (to <= unavailable_registration.getStartDate())))
-		return false;
-
-	return true;
-	*/
 }
 
 bool Room::isAvailable(Date date) const {
@@ -132,24 +112,10 @@ bool Room::checkout() {
 
 void Room::unavailable(Date from, Date to, char* note) {
 	unavailable_registration = Registration(Period(from, to), note);
-	/*
-	Registration* new_unavailable_registration = copyRegistrations(unavailable_registration, unavailable_reservations_num, unavailable_reservations_num + 1);
-	new_unavailable_reservations[unavailable_reservations_num] = Reservation(Period(from, to), note);
-	if (unavailable_reservations_num == 1)
-		delete unavailable_reservations;
-	else
-		delete[] unavailable_reservations;
-
-	unavailable_reservations = new_unavailable_reservations;
-	++reservations_num;
-	new_unavailable_reservations = nullptr;
-	*/
 }
 
 
 int Room::daysUsed(Date& from, Date& to) const {
-	// I'll check in the Hotel function if this period is available or not, if its available Ill return that the room is used 0 days
-	// 
 	int days_used = 0;
 	Date registration_start_date;
 	Date registration_end_date;

@@ -13,8 +13,8 @@ public:
 
 	int findSuitableRoom(int beds, Date from, Date to) const;
 
-	void checkin(int room_number, Date from, Date to, char* note, int beds);		// with the room checkin
-	void checkout(int room_number);	// with the room checkout
+	void checkin(int room_number, Date from, Date to, char* note, int beds);
+	void checkout(int room_number);
 	void availability(Date date) const;
 	void report(Date from, Date to) const;
 	void find(int beds, Date from, Date to) const;

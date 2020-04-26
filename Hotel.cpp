@@ -6,12 +6,10 @@
 Hotel::Hotel() {
 	int room_number = 1;
 	int beds;
-	//int x = (rand() % 100) + 1;
-	int x = 6;
+	int x = (rand() % 100) + 1;	// in [1, 100] range for simplicity, it can be bigger.
 	rooms = new Room[x];
 	for (int i = 0; i < x; ++i) {
-		//beds = (rand() % 5) + 1;
-		beds = 6;
+		beds = (rand() % 5) + 1;	// in [1,5] range for simplicity, it can be bigger.
 		rooms[i] = Room(room_number++, beds);
 	}
 	rooms_num = x;
@@ -168,22 +166,6 @@ void Hotel::find_algo(int beds, Date from, Date to) {
 			return;
 		}
 	}
-
-	int secondRoom = findSuitableRoom(guests, from, to);
-	if (secondRoom == -1) {
-		std::cout << "The algorithm can't free room for the special guests. Sorry! \n";
-		return;
-	}
-	int guestsInSecondRoom = rooms[secondRoom].getGuests();
-	for (int i = 0; i < rooms_num, i != firstRoom, i != secondRoom; ++i) {
-		if (i != firstRoom && i != secondRoom && rooms[i].getFreeBeds() >= guestsInSecondRoom) {
-			rooms[i].addOtherPeople(from, to, guestsInSecondRoom);
-			rooms[secondRoom].addOtherPeople(from, to, guests);
-			rooms[firstRoom].checkout();
-			std::cout << "Room " << firstRoom + 1 << " is free for the special guests.\n";
-			return;
-		}
-	}
-
 	std::cout << "The algorithm can't free room for the special guests. Sorry! \n";
+	
 }
