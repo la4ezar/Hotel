@@ -30,11 +30,11 @@ int Hotel::getRoomsNum() const {
 	return rooms_num;
 }
 
-void Hotel::checkin(int room_number, Date from, Date to, char* note) {
+void Hotel::checkin(int room_number, Date from, Date to, char* note, int beds) {
 	for (int i = 0; i < rooms_num; ++i) {
 		if (room_number == rooms[i].getRoomNumber()) {
 			if (rooms[i].isAvailable(from,to)) {
-				rooms[i].checkin(from, to, note);
+				rooms[i].checkin(from, to, note, beds);
 				std::cout << "Succesfull checkin.\n";
 				return;
 			}
@@ -76,11 +76,14 @@ void Hotel::availability(Date date) const {
 }
 
 void Hotel::report(Date from, Date to) const {
+	int days_used; 
 	for (int i = 0; i < rooms_num; ++i) {
-		if (rooms[i].isAvailable(from, to))
+		days_used = rooms[i].daysUsed(from, to);
+
+		if (days_used == 0)
 			continue;
-		else
-			std::cout << "Room " << i << " is used " << rooms[i].daysUsed(from,to) << " times in this period.\n";
+	
+		std::cout << "Room " << i << " is used " << rooms[i].daysUsed(from,to) << " times in this period.\n";
 	}
 }
 

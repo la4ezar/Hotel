@@ -1,15 +1,15 @@
 #pragma once
-#include "Reservation.h"
+#include "Registration.h"
 
 class Room {
-	Reservation* reservations;
-	int reservations_num;
-	Reservation* unavailable_reservations;	// for unavailable command
-	int unavailable_reservations_num;
+	Registration* registrations;
+	int registrations_num;
+	Registration unavailable_registration;
 	int beds;
+	int guests;
 	unsigned room_number;
 
-	Reservation* copyReservations(Reservation* reservations, int old_num, int new_num) const;
+	Registration* copyRegistrations(Registration* Registrations, int old_num, int new_num) const;
 public:
 	Room (unsigned room_number = 0, int beds = 0);
 	~Room();
@@ -18,14 +18,14 @@ public:
 	bool isAvailable(Date from, Date to) const;
 	bool isAvailable(Date date) const;
 
-	Reservation* getReservations() const;
-	int getReservationsNum() const;
-	Reservation* getUnavailableReservations() const;
-	int getUnavailableReservationsNum() const;
+	Registration* getRegistrations() const;
+	//int getRegistrationsNum() const;
+	Registration getUnavailableRegistration() const;
 	int getBeds() const;
+	int getGuests() const;
 	unsigned getRoomNumber() const;
 
-	void checkin(Date from, Date to, char* note);
+	void checkin(Date from, Date to, char* note, int guests);
 	void unavailable(Date from, Date to, char* note);
 	bool checkout();
 	int daysUsed(Date& from, Date& to) const; //with Date operator- I will cout the days

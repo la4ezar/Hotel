@@ -2,53 +2,56 @@
 #include "cstring"
 #include <iostream>
 
-Room::Room(unsigned room_number, int beds): beds(beds), room_number(room_number), 
-											reservations_num(0), unavailable_reservations_num(0) {
-	reservations = nullptr;
-	unavailable_reservations = nullptr;
+Room::Room(unsigned room_number, int beds): beds(beds), room_number(room_number), guests(0),
+											registrations_num(0), unavailable_registration() {
+	registrations = nullptr;
 }
 
 
-Reservation* Room::copyReservations(Reservation* reservations, int old_num, int new_num) const {
-	Reservation* new_reservations = new Reservation[new_num];
+Registration* Room::copyRegistrations(Registration* Rgistrations, int old_num, int new_num) const {
+	Registration* new_registrations = new Registration[new_num];
 	for (int i = 0; i < old_num; ++i) 
-		new_reservations[i] = reservations[i];
-	return new_reservations;
+		new_registrations[i] = registrations[i];
+	return new_registrations;
 }
 
 Room::~Room() {
-	delete[] reservations;
-	delete[] unavailable_reservations;
-	reservations = nullptr;
-	unavailable_reservations = nullptr;
+	delete[] registrations;
+	registrations = nullptr;
 }
 
 Room& Room::operator=(const Room& other) {
 	if (this != &other) {
-		this->reservations = copyReservations(other.reservations, other.reservations_num, other.reservations_num);
-		this->reservations_num = other.reservations_num;
+		this->registrations = copyRegistrations(other.registrations, other.registrations_num, other.registrations_num);
+		this->registrations_num = other.registrations_num;
 
-		this->unavailable_reservations = copyReservations(other.unavailable_reservations, other.unavailable_reservations_num, other.unavailable_reservations_num);
-		this->unavailable_reservations_num = other.unavailable_reservations_num;
+		this->unavailable_registration = other.unavailable_registration;
 
 		this->beds = other.beds;
+		this->guests = other.guests;
 		this->room_number = other.room_number;
 	}
 	return *this;
 }
 
-Reservation* Room::getReservations() const {
-	return copyReservations(this->reservations, this->reservations_num, this->reservations_num);
+Registration* Room::getRegistrations() const {
+	return copyRegistrations(this->registrations, this->registrations_num, this->registrations_num);
 }
+/*
 int Room::getReservationsNum() const {
 	return this->reservations_num;
 }
-Reservation* Room::getUnavailableReservations() const {
-	return copyReservations(this->unavailable_reservations, this->unavailable_reservations_num, this->unavailable_reservations_num);
+*/
+
+Registration Room::getUnavailableRegistration() const {
+	return this->unavailable_registration;
 }
+
+/*
 int Room::getUnavailableReservationsNum() const {
 	return this->unavailable_reservations_num;
 }
+*/
 
 int Room::getBeds() const {
 	return beds;
@@ -57,58 +60,66 @@ unsigned Room::getRoomNumber() const {
 	return room_number;
 }
 
+int Room::getGuests() const {
+	return guests;
+}
+
+
 bool Room::isAvailable(Date from, Date to) const {
-	if (reservations_num == 0)
-		return true;
+	if (registrations[registrations_num - 1].getIsCheckout() == false)
+		return false;
 
-	for (int i = 0; i < reservations_num; ++i) {
-		if (!((reservations[i].getEndDate() <= from) ||
-			(to <= reservations[i].getStartDate()))) {
-			return false;
-		}
-	}
-
-	for (int i = 0; i < unavailable_reservations_num; ++i) {
-		if (!((unavailable_reservations[i].getEndDate() <= from) ||
-			(to <= unavailable_reservations[i].getStartDate()))) {
-			return false;
-		}
-	}
+	// If the dates intersect
+	if (!((unavailable_registration.getEndDate() <= from) || (to <= unavailable_registration.getStartDate())))
+		return false;
 
 	return true;
+	
+	/*
+	if(registrations[registrations_num - 1].getIsCheckout() == true)
+		if (!((registrations[registrations_num - 1].getEndDate() <= from) || (to <= registrations[registrations_num - 1].getStartDate())))
+			return false;
+
+	if (!((unavailable_registration.getEndDate() <= from) || (to <= unavailable_registration.getStartDate())))
+		return false;
+
+	return true;
+	*/
 }
 
 bool Room::isAvailable(Date date) const {
-	Date date_nextDay(date.getYear(), date.getMonth(), date.getDay() + 1);
-	return isAvailable(date, date_nextDay);
+	return isAvailable(date, date.nextDay());
 }
 
-void Room::checkin(Date from, Date to, char* note) {
-	Reservation* new_reservations = copyReservations(reservations, reservations_num, reservations_num + 1);
-	new_reservations[reservations_num] = Reservation(Period(from, to), note);
-	if (reservations_num == 1)
-		delete reservations;
+void Room::checkin(Date from, Date to, char* note, int guests) {
+	Registration* new_registrations = copyRegistrations(registrations, registrations_num, registrations_num + 1);
+	new_registrations[registrations_num] = Registration(Period(from, to), note);
+	if (registrations_num == 1)
+		delete registrations;
 	else
-		delete[] reservations;
+		delete[] registrations;
 
-	reservations = new_reservations;
-	++reservations_num;
-	new_reservations = nullptr;
+	registrations = new_registrations;
+	++registrations_num;
+	new_registrations = nullptr;
+
+	this->guests = guests;
 }
 
 bool Room::checkout() {
-	for (int i = 0; i < reservations_num; ++i) {
-		if (reservations[i].getIsCheckout() == false) {
-			reservations[i].checkout();
-			return true;
-		}
+	if(registrations[registrations_num - 1].getIsCheckout() == false){
+		registrations[registrations_num - 1].checkout();
+		this->guests = 0;
+		return true;
 	}
 	return false;
 }
 
 
 void Room::unavailable(Date from, Date to, char* note) {
-	Reservation* new_unavailable_reservations = copyReservations(unavailable_reservations, unavailable_reservations_num, unavailable_reservations_num + 1);
+	unavailable_registration = Registration(Period(from, to), note);
+	/*
+	Registration* new_unavailable_registration = copyRegistrations(unavailable_registration, unavailable_reservations_num, unavailable_reservations_num + 1);
 	new_unavailable_reservations[unavailable_reservations_num] = Reservation(Period(from, to), note);
 	if (unavailable_reservations_num == 1)
 		delete unavailable_reservations;
@@ -118,29 +129,33 @@ void Room::unavailable(Date from, Date to, char* note) {
 	unavailable_reservations = new_unavailable_reservations;
 	++reservations_num;
 	new_unavailable_reservations = nullptr;
+	*/
 }
+
 
 int Room::daysUsed(Date& from, Date& to) const {
 	// I'll check in the Hotel function if this period is available or not, if its available Ill return that the room is used 0 days
 	// 
 	int days_used = 0;
-	Date reservation_start_date;
-	Date reservation_end_date;
-	for (int i = 0; i < reservations_num; ++i) {
-		reservation_start_date = reservations[i].getStartDate();
-		reservation_end_date = reservations[i].getEndDate();
-		if (!((reservation_end_date <= from) ||
-			(to <= reservation_start_date))) {
-			if (reservation_start_date <= from && to <= reservation_end_date) {
+	Date registration_start_date;
+	Date registration_end_date;
+	for (int i = 0; i < registrations_num; ++i) {
+		registration_start_date = registrations[i].getStartDate();
+		registration_end_date = registrations[i].getEndDate();
+
+		// If the dates intersects
+		if (!((registration_end_date <= from) ||
+			(to <= registration_start_date))) {
+			if (registration_start_date <= from && to <= registration_end_date) {
 				days_used += to - from;
 				continue;
 			} 
-			else if (reservation_start_date <= from) {
-				days_used += reservation_end_date - from;
+			else if (registration_start_date <= from) {
+				days_used += registration_end_date - from;
 				continue;
 			}
-			else if (to <= reservation_end_date) {
-				days_used += to - reservation_start_date;
+			else if (to <= registration_end_date) {
+				days_used += to - registration_start_date;
 			}
 		}
 	}

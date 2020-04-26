@@ -21,7 +21,13 @@ void TestHotelAvailability(Hotel& hotel);
 
 int main() {
 	srand(time(0));
-	Hotel hotel;
+
+	Date dt2(2004, 2 ,28);
+	Date dt1;
+	dt1 = dt2.nextDay();
+	dt2.nextDay().printDate();
+
+	//Hotel hotel;
 	//TestHotelConstructor(hotel);
 	//TestHotelCheckin(hotel);
 	//TestHotelCheckout(hotel);

@@ -1,19 +1,19 @@
-#include "Reservation.h"
+#include "Registration.h"
 #include "cstring"
 
-Reservation::Reservation(): period(), note(nullptr), isCheckout(false) {}
+Registration::Registration(): period(), note(nullptr), isCheckout(false) {}
 
-Reservation::Reservation(Period period, char* note): isCheckout(false) {
+Registration::Registration(Period period, char* note): isCheckout(false) {
 	this->period = period;
 	this->note = new char[strlen(note) + 1];
 	strcpy(this->note, note);
 }
 
-Reservation::~Reservation() {
+Registration::~Registration() {
 	delete[] note;
 	note = nullptr;
 }
-Reservation& Reservation::operator=(const Reservation& other) {
+Registration& Registration::operator=(const Registration& other) {
 	if (this != &other) {
 		this->period = other.period;
 		this->isCheckout = other.isCheckout;
@@ -24,27 +24,27 @@ Reservation& Reservation::operator=(const Reservation& other) {
 	return *this;
 }
 
-Period Reservation::getPeriod() const {
+Period Registration::getPeriod() const {
 	return this->period;
 }
 
-bool Reservation::getIsCheckout() const {
+bool Registration::getIsCheckout() const {
 	return this->isCheckout;
 }
 
-char* Reservation::getNote() const {
+char* Registration::getNote() const {
 	char* new_note = new char[strlen(this->note) + 1];
 	strcpy(new_note, this->note);
 	return new_note;
 }
 
-Date Reservation::getStartDate() const {
+Date Registration::getStartDate() const {
 	return period.getStartDate();
 }
-Date Reservation::getEndDate() const {
+Date Registration::getEndDate() const {
 	return period.getEndDate();
 }
 
-void Reservation::checkout() {
+void Registration::checkout() {
 	this->isCheckout = true;
 }

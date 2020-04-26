@@ -30,9 +30,11 @@ bool Date::isValidDate(int year, int month, int day) const {
 
 	switch (month) {
 	case 2:
-		if (isLeap(year)) 
-			if (day > 29) 
+		if (isLeap(year)) {
+			if (day > 29) {
 				return false;
+			}
+		}
 		else
 			if (day > 28)
 				return false;
@@ -47,34 +49,19 @@ bool Date::isValidDate(int year, int month, int day) const {
 	}
 	return true;
 }
-/*
-void Date::recalculate(Date& date) {
-	if (date.day < 1 || date.month < 1) {
-		date.day = 1;
-		date.month = 1;
-	}
+
+Date Date::nextDay() {
+	Date new_date;
+	if (isValidDate(this->year, this->month, this->day + 1))
+		new_date = Date(this->year, this->month, this->day + 1);
 	else {
-		if (date.day > 31) {
-			date.month += ((date.day - 1) / 31);
-			if (date.day % 31 == 0) {
-				date.day = 31;
-			}
-			else {
-				date.day = date.day % 31;
-			}
-		}
-		if (date.month > 12) {
-			date.year += ((date.month - 1) / 12);
-			if (date.month % 12 == 0) {
-				date.month = 12;
-			}
-			else {
-				date.month = date.month % 12;
-			}
-		}
+		if (isValidDate(this->year, this->month + 1, 1)) 
+			new_date = Date(this->year, this->month + 1, 1);
+		else
+			new_date = Date(this->year + 1, 1 , 1);
 	}
+	return new_date;
 }
-*/
 
 Date::Date(int year, int month, int day) {
 	if(isValidDate(year, month, day)){	

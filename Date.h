@@ -7,7 +7,6 @@ class Date {
 	unsigned month;
 	unsigned year;
 
-	//void recalculate(Date& date);
 	bool isLeap(int year) const;
 	void setDefault();
 	bool isValidDate(int year, int month, int day) const;
@@ -25,9 +24,8 @@ public:
 	bool operator<=(const Date& other) const;
 	int& operator-(const Date& other);
 
-	//void addDays(int days);
+	Date nextDay();
 	
-
 	unsigned getDay() const;
 	unsigned getMonth() const;
 	unsigned getYear() const;

@@ -1,15 +1,15 @@
 #pragma once
 #include "Period.h"
 
-class Reservation {
+class Registration {
 	Period period;
 	bool isCheckout;
 	char* note;
 public:
-	Reservation();
-	Reservation(Period period, char* note);
-	~Reservation();
-	Reservation& operator=(const Reservation& other);
+	Registration();
+	Registration(Period period, char* note);
+	~Registration();
+	Registration& operator=(const Registration& other);
 
 	void checkout();
 
